@@ -535,16 +535,29 @@ print("sorted packets: ",packets)
 n = int(input("Enter number of nodes : "))
 print("Enter the cost matrix : ")
 cost_matrix = [list(map(int, input().split())) for _ in range(n)]
+
+# Initialize the routing table with infinite distance
 rt = [[float('inf')] * (n + 1) for _ in range(n + 1)]
+
+# Set distance to self as zero
 for i in range(1, n + 1):
- rt[i][i] = 0
-  for _ in range(n - 1):
-   for i in range(1, n + 1):
-    for j in range(1, n + 1):
-     for k in range(1, n + 1):
-      rt[i][j] = min(rt[i][j], rt[i][k] + cost_matrix[k-1][j-1])
+    rt[i][i] = 0
+
+# Bellman-Ford algorithm for finding the shortest path
+for _ in range(n - 1):
     for i in range(1, n + 1):
-     print(f"\nRouter {chr(i + 64)}:" + "".join(f"\n\tNode {j} Distance: {rt[i][j]}" for j in range(1,n + 1)))
+        for j in range(1, n + 1):
+            for k in range(1, n + 1):
+                rt[i][j] = min(rt[i][j], rt[i][k] + cost_matrix[k-1][j-1])
+
+# Print the routing table
+for i in range(1, n + 1):
+    print(f"\nRouter {chr(i + 64)}:" + "".join(f"\n\tNode {j} Distance: {rt[i][j]}" for j in range(1, n + 1)))
+
+
+
+
+
 ----------------------------------------------------------------------------------------------------
 3. UDP server-client
 ----------------------------------------------------------------------------------------------------
